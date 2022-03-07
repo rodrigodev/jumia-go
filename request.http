@@ -1,0 +1,6 @@
+GET http://localhost:8081/phone
+Accept: application/json
+
+###
+
+OPTIONS http://localhost:8081/phone
