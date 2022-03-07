@@ -1,6 +1,8 @@
 // Mithril SPA
-
-var params = {}
+var filters = {
+    country: "",
+    state: ""
+}
 
 var fetchData = function() {
     m.request({
@@ -9,12 +11,19 @@ var fetchData = function() {
     })
     .then(function(items) {
         this.App.countrySelect = [...new Set(items.map( row => ( row.country )))];
-        this.App.data = items;
+        Data.phones.list = items;
+        redraw(new Event("init"));
     })
     .catch(function (reason) {
         console.log(reason);
     })
 };
+
+var Data = {
+    phones: {
+        list: [],
+    }
+}
 
 var App = {
     oninit: fetchData,
@@ -24,17 +33,12 @@ var App = {
     data: [],
     countrySelect: [],
 
-    buttons: m("div",
-        m('button.ui.button', {onclick: this.previousPage}, "< Prev"),
-        m('button.ui.button', {onclick: this.nextPage}, "Next >"),
-    ),
-
     thead: m('thead',
-        m('tr', 
-            m('td', 'Conuntry'), 
-            m('td', 'State'), 
-            m('td', 'Country Code'), 
-            m('td', 'Phone Num.'), 
+        m('tr',
+            m('td', 'Country'),
+            m('td', 'State'),
+            m('td', 'Country Code'),
+            m('td', 'Phone Num.'),
         )
     ),
 
@@ -61,39 +65,28 @@ var App = {
                 ),
                 m("select.ui.dropdown.item#state", { onchange: redraw },
                     m("option", { value: ""}, "State"),
-                    m("option", { value: "ok"}, "Valid phone numbers"),
-                    m("option", { value: "nok"}, "Invalid phone numbers"),
+                    m("option", { value: "OK"}, "Valid phone numbers"),
+                    m("option", { value: "NOK"}, "Invalid phone numbers"),
                 ),
             ),
-            m('table.ui.celled.table', 
+            m('table.ui.celled.table',
                 this.thead,
                 m("tbody", this.data.map(this.tr))
-            ),
-            this.buttons
+            )
         ]);
-    },
-
-    nextPage: function(){
-        this.start += this.pageSize;
-        if (this.start > this.max){
-            this.start -= this.pageSize;
-        }
-        this.setStart();
-    },
-
-    prevPage: function() {
-        this.start = Math.max(this.start - this.pageSize, 1);
-        this.setStart();
     },
 };
 
 
 var redraw = function (e) {
-    if (e.target.value !== "") {
-        params[e.target.id] = e.target.value;
-    } else {
-        delete params[e.target.id];
+    if (e.type === "change") {
+        filters[e.target.id] = e.target.value;
     }
+
+    App.data = Data.phones.list.filter(function (item) {
+        return (item.country === filters.country || filters.country === "") &&
+            (item.state === filters.state || filters.state === "") ;
+    });
 };
 
 var root = document.body;

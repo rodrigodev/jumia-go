@@ -1,6 +1,5 @@
 package phone
 
-
 type ValidationError struct {
 	Err string
 }
@@ -14,5 +13,5 @@ func NewValidationError(err string) error {
 }
 
 var (
-	ErrCouldNotFetchDataFromDatabase   = NewValidationError("could not fetch data from database")
+	ErrCouldNotFetchDataFromDatabase = NewValidationError("could not fetch data from database")
 )

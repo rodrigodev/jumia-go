@@ -26,7 +26,7 @@ func Static() Option {
 }
 
 // Phone endpoints
-func Phone(s *service.PhoneService) Option {
+func Phone(s service.PhoneServiceContainer) Option {
 	return func(h *Handler) error {
 		h.router.HandleFunc("/phone", GetPhonesHandler(s)).Methods("GET", "OPTIONS")
 		return nil

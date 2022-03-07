@@ -10,13 +10,9 @@ import (
 	"go.uber.org/zap"
 )
 
-const (
-	countryParameter = "country"
-	stateParameter   = "state"
-)
-
 const errGetPhonesFailed = "fetching phones was not possible"
 
+// Handler implements the http serve interface
 type Handler struct{ router *mux.Router }
 
 func New(opts ...Option) (*Handler, error) {
@@ -45,7 +41,7 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 // GetPhonesHandler gets all phones
-func GetPhonesHandler(s *service.PhoneService) http.HandlerFunc {
+func GetPhonesHandler(s service.PhoneServiceContainer) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 

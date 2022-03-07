@@ -12,6 +12,7 @@ import (
 	"github.com/rodrigodev/jumia-go/src/internal/phone/service"
 	"github.com/rodrigodev/jumia-go/src/internal/transport"
 
+	_ "github.com/golang/mock/mockgen/model"
 	"go.uber.org/zap"
 	"golang.org/x/sync/errgroup"
 )
